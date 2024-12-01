@@ -1,3 +1,4 @@
+import 'package:bdcoe/ui/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,11 +18,11 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     // Navigate to the next screen after a delay
-    Future.delayed(const Duration(seconds: 20), () {
+    Future.delayed(const Duration(seconds: 5), () {
       // Replace with your navigation logic
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const NextScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     });
   }
@@ -70,14 +71,3 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-class NextScreen extends StatelessWidget {
-  const NextScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Next Screen')),
-      body: const Center(child: Text('This is the next screen.')),
-    );
-  }
-}
