@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Scan extends StatefulWidget {
   const Scan({super.key});
@@ -27,28 +29,63 @@ class _ScanState extends State<Scan> {
     });
   }
 
-  void _showScannedDataDialog(String scannedData) {
+  void _showResponseDialog(String responseMessage) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: const Color.fromARGB(255, 35, 36, 36),
-          title: Text('Scanned Data',style: TextStyle(color: const Color.fromARGB(255, 17, 73, 194)),),
-          content: Text(scannedData,style: TextStyle(color: const Color.fromARGB(255, 17, 73, 194)),),
+          title: Text(
+            'API Response',
+            style: const TextStyle(color: Color.fromARGB(255, 17, 73, 194)),
+          ),
+          content: Text(
+            responseMessage,
+            style: const TextStyle(color: Color.fromARGB(255, 17, 73, 194)),
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() {
-                  isScanning = false; // Revert back to animation
+                  isScanning = false;
                 });
               },
-              child: Text('OK',style: TextStyle(color: const Color.fromARGB(255, 253, 254, 255)),),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Color.fromARGB(255, 253, 254, 255)),
+              ),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _sendDataToApi(String scannedData) async {
+    final url = Uri.parse('https://bdcoe-mail-service.vercel.app/qr/verify'); // Replace with your API endpoint
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'encrypted': scannedData,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        _showResponseDialog(responseBody['msg']);
+      } else {
+        _showResponseDialog(
+            'Failed to mark attendance. Please try again later.');
+      }
+    } catch (e) {
+      _showResponseDialog('An error occurred: $e');
+    }
   }
 
   @override
@@ -63,7 +100,6 @@ class _ScanState extends State<Scan> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: height * 0.05),
-           
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.05),
               child: Text(
@@ -71,7 +107,7 @@ class _ScanState extends State<Scan> {
                 style: GoogleFonts.robotoMono(
                   textStyle: TextStyle(
                     color: const Color.fromARGB(255, 33, 92, 186),
-                    fontSize: width * 0.1, 
+                    fontSize: width * 0.08,
                     letterSpacing: 0.5,
                     fontWeight: FontWeight.w400,
                   ),
@@ -79,8 +115,6 @@ class _ScanState extends State<Scan> {
               ),
             ),
             SizedBox(height: height * 0.02),
-
-            
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Text(
@@ -88,15 +122,13 @@ class _ScanState extends State<Scan> {
                 style: GoogleFonts.robotoMono(
                   textStyle: TextStyle(
                     color: const Color.fromARGB(255, 245, 242, 246),
-                    fontSize: width * 0.045, 
+                    fontSize: width * 0.045,
                     letterSpacing: 0.1,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
             ),
-
-           
             Expanded(
               child: Center(
                 child: isScanning
@@ -105,7 +137,7 @@ class _ScanState extends State<Scan> {
                         onQRViewCreated: _onQRViewCreated,
                       )
                     : SizedBox(
-                        height: height * 0.4, 
+                        height: height * 0.4,
                         width: width * 0.8,
                         child: LottieBuilder.asset(
                           "assets/scan.json",
@@ -115,8 +147,6 @@ class _ScanState extends State<Scan> {
                       ),
               ),
             ),
-
-            // Centered Button
             Padding(
               padding: EdgeInsets.only(bottom: height * 0.07),
               child: Center(
@@ -135,7 +165,7 @@ class _ScanState extends State<Scan> {
                     style: GoogleFonts.robotoMono(
                       textStyle: TextStyle(
                         color: Colors.white,
-                        fontSize: width * 0.045, // Responsive font size
+                        fontSize: width * 0.045,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -153,10 +183,10 @@ class _ScanState extends State<Scan> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        isScanning = false; // Pause the scanner
+        isScanning = false;
       });
-      controller.pauseCamera(); // Pause the camera
-      _showScannedDataDialog(scanData.code!); // Show dialog with scanned data
+      controller.pauseCamera();
+      _sendDataToApi(scanData.code!);
     });
   }
 }
