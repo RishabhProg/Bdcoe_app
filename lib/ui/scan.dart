@@ -36,7 +36,7 @@ class _ScanState extends State<Scan> {
         return AlertDialog(
           backgroundColor: const Color.fromARGB(255, 35, 36, 36),
           title: Text(
-            'API Response',
+            'Response',
             style: const TextStyle(color: Color.fromARGB(255, 17, 73, 194)),
           ),
           content: Text(
@@ -63,7 +63,7 @@ class _ScanState extends State<Scan> {
   }
 
   Future<void> _sendDataToApi(String scannedData) async {
-    final url = Uri.parse('https://bdcoe-mail-service.vercel.app/qr/verify'); // Replace with your API endpoint
+    final url = Uri.parse('https://bdcoe-mail-service.vercel.app/qr/verify');
 
     try {
       final response = await http.post(
@@ -102,16 +102,31 @@ class _ScanState extends State<Scan> {
             SizedBox(height: height * 0.05),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-              child: Text(
-                'Attendance',
-                style: GoogleFonts.robotoMono(
-                  textStyle: TextStyle(
-                    color: const Color.fromARGB(255, 33, 92, 186),
-                    fontSize: width * 0.08,
-                    letterSpacing: 0.5,
-                    fontWeight: FontWeight.w400,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Attendance',
+                    style: GoogleFonts.robotoMono(
+                      textStyle: TextStyle(
+                        color: const Color.fromARGB(255, 33, 92, 186),
+                        fontSize: width * 0.08,
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.edit,
+                      color: const Color.fromARGB(255, 33, 92, 186),
+                      size: width * 0.07,
+                    ),
+                    onPressed: () {
+                      _showManualEntryDialog();
+                    },
+                  ),
+                ],
               ),
             ),
             SizedBox(height: height * 0.02),
@@ -188,5 +203,133 @@ class _ScanState extends State<Scan> {
       controller.pauseCamera();
       _sendDataToApi(scanData.code!);
     });
+  }
+
+ void _showManualEntryDialog() {
+  showDialog(
+    context: context,
+    builder: (context) {
+      String member1 = '';
+      String member2 = '';
+
+      return AlertDialog(
+        backgroundColor: const Color.fromARGB(255, 30, 30, 30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Row(
+          children: [
+            Icon(
+              Icons.edit,
+              color: const Color.fromARGB(255, 17, 73, 194),
+            ),
+            SizedBox(width: 8),
+            Text(
+              'Manual Entry',
+              style: const TextStyle(
+                color: Color.fromARGB(255, 17, 73, 194),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Member 1',
+                labelStyle: const TextStyle(color: Colors.grey),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: const TextStyle(color: Colors.white),
+              onChanged: (value) {
+                member1 = value;
+              },
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Member 2',
+                labelStyle: const TextStyle(color: Colors.grey),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              style: const TextStyle(color: Colors.white),
+              onChanged: (value) {
+                member2 = value;
+              },
+            ),
+          ],
+        ),
+        actions: [
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 17, 73, 194),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _sendManualDataToApi(member1, member2);
+              },
+              child: const Text(
+                'Submit',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+  Future<void> _sendManualDataToApi(String member1, String member2) async {
+    final url = Uri.parse('https://bdcoe-mail-service.vercel.app/qr/manualVerify');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'member1studentNo': member1,
+          'member2studentNo': member2,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        _showResponseDialog(responseBody['msg']);
+      } else {
+        _showResponseDialog('Failed to submit. Please try again later.');
+      }
+    } catch (e) {
+      _showResponseDialog('An error occurred: $e');
+    }
   }
 }
