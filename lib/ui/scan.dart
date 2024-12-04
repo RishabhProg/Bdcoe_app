@@ -6,6 +6,8 @@ import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:vibration/vibration.dart';
+
 class Scan extends StatefulWidget {
   const Scan({super.key});
 
@@ -79,9 +81,14 @@ class _ScanState extends State<Scan> {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
+        if (await Vibration.hasVibrator()!=null) {
+    Vibration.vibrate();
+}
         _showResponseDialog(responseBody['msg']);
       } else {
-        _showResponseDialog(
+         if (await Vibration.hasVibrator()!=null) {
+    Vibration.vibrate();
+}       _showResponseDialog(
             'Data:${scannedData}\nFailed ');
       }
     } catch (e) {
@@ -332,8 +339,14 @@ class _ScanState extends State<Scan> {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
+        if (await Vibration.hasVibrator()!=null) {
+    Vibration.vibrate();
+}
         _showResponseDialog(responseBody['msg']);
       } else {
+         if (await Vibration.hasVibrator()!=null) {
+    Vibration.vibrate();
+}
         _showResponseDialog('Failed to submit. Please try again later.');
       }
     } catch (e) {
