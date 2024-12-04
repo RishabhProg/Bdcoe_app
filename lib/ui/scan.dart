@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -81,7 +82,7 @@ class _ScanState extends State<Scan> {
         _showResponseDialog(responseBody['msg']);
       } else {
         _showResponseDialog(
-            'Failed to mark attendance. Please try again later.');
+            'Data:${scannedData}\nFailed ');
       }
     } catch (e) {
       _showResponseDialog('An error occurred: $e');
