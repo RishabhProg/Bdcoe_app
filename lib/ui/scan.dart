@@ -151,6 +151,13 @@ class _ScanState extends State<Scan> {
                     ? QRView(
                         key: qrKey,
                         onQRViewCreated: _onQRViewCreated,
+                        overlay: QrScannerOverlayShape(
+                          borderColor: Colors.blueAccent,
+                          borderRadius: 10,
+                          borderLength: 30,
+                          borderWidth: 10,
+                          cutOutSize: width * 0.6, 
+                        ),
                       )
                     : SizedBox(
                         height: height * 0.4,
