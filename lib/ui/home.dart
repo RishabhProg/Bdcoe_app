@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     final provider = Provider.of<NavProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: provider.screen[provider.index],
       bottomNavigationBar: CurvedNavigationBar(
         height: 60,
