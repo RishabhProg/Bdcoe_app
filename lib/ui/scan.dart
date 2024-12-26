@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+//import 'dart:typed_data';
 
 import 'package:bdcoe/models/scanner_provider.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:permission_handler/permission_handler.dart';
 
 class scan extends StatefulWidget {
   const scan({super.key});
@@ -97,6 +97,7 @@ class _scanState extends State<scan> {
                         child: MobileScanner(
                           controller: MobileScannerController(
                               detectionSpeed: DetectionSpeed.noDuplicates,
+                          
                               returnImage: true),
                           onDetect: (capture) async {
                             final List<Barcode> barcodes = capture.barcodes;

@@ -1,5 +1,5 @@
 import 'package:bdcoe/ui/achievement.dart';
-import 'package:bdcoe/ui/event.dart';
+import 'package:bdcoe/ui/domain.dart';
 //import 'package:bdcoe/ui/home.dart';
 import 'package:bdcoe/ui/scan.dart';
 import 'package:bdcoe/ui/team.dart';
@@ -10,10 +10,11 @@ class NavProvider extends ChangeNotifier {
    const Icon(Icons.home, size: 30, color: Colors.black),
    const Icon(Icons.qr_code, size: 30, color: Colors.black),
    const Icon(Icons.photo_album, size: 30, color: Colors.black),
+   const Icon(Icons.auto_awesome_rounded,size: 30, color: Colors.black),
    const Icon(Icons.person, size: 30, color: Colors.black),
   ];
 
-  final _screen = [const Event(), const scan(),const Achievement(),const Team()];
+  final _screen = [const Domain(), const scan(),const Achievement(),const Team()];
   int _index = 0;
 
   List<Widget> get items => _items;
