@@ -15,7 +15,7 @@ class _EventsState extends State<Events> {
       backgroundColor: Colors.black,
       body: Center(
         child: Text(
-                  'Domains',
+                  'Events',
                   style: GoogleFonts.aBeeZee(
           textStyle: const TextStyle(
             color: Color.fromARGB(255, 245, 242, 246),
