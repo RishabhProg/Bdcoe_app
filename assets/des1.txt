@@ -1,0 +1,1 @@
+Big data is a term used to describe large and complex datasets that cannot be handled by traditional data processing applications. It is the collection of massive amounts of structured and unstructured data from different sources that can be used to identify patterns, trends and correlations to help companies make better decisions and gain a competitive advantage.

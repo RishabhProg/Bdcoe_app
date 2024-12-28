@@ -1,0 +1,1 @@
+UI/UX design involves understanding the needs and goals of users and then designing visually pleasing and functional interfaces. UI/UX design is an important part of software development, as it allows for user feedback and testing that can be used to refine the design. It is a highly iterative process that focuses on creating an engaging and intuitive experience for users.
