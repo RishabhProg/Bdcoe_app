@@ -15,7 +15,7 @@ class _DomainState extends State<Domain> {
       backgroundColor: Colors.black,
       body: Center(
         child: Text(
-                  'Domains',
+                  'Domain',
                   style: GoogleFonts.aBeeZee(
           textStyle: const TextStyle(
             color: Color.fromARGB(255, 245, 242, 246),
