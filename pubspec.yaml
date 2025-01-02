@@ -93,6 +93,8 @@ flutter:
     - assets/des6.txt
     - assets/firstdomain.png
     - assets/teambck.png
+    - assets/eventpage.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
