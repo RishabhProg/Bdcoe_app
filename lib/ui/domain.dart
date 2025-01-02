@@ -154,7 +154,7 @@ class _DomainState extends State<Domain> {
               ),
 
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 50),
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -171,14 +171,15 @@ class _DomainState extends State<Domain> {
               ),
             ),
 
-
             ListView.builder(
               shrinkWrap: true,
               physics:const NeverScrollableScrollPhysics(),
 
               itemCount: domains.length,
               itemBuilder: (context, index) {
-                return FlipCard(
+                return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
+                  child:FlipCard(
                   front:SizedBox(
                     height:200,
                     child:Card(
@@ -213,7 +214,9 @@ class _DomainState extends State<Domain> {
                   ),
                   ),
                   ),
-                  back: Card(
+                  back: Container(
+                  height:200,
+                  child:Card(
                     color: Colors.grey[800],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -224,9 +227,9 @@ class _DomainState extends State<Domain> {
                         padding: const EdgeInsets.all(16.0),
                         child: SingleChildScrollView(
                           child: SizedBox(
-                            width: double.infinity, // Ensure it takes the full width
+                            width: double.infinity, 
                             child: Text(
-                              descriptions[index],  // Your description content
+                              descriptions[index],  
                               style: GoogleFonts.aBeeZee(
                                 textStyle: const TextStyle(
                                   color: Colors.white,
@@ -242,15 +245,16 @@ class _DomainState extends State<Domain> {
                       ),
                     ),
                   ),
-
-                );
-              },
-            ),
-          ],
+                ),
+              ),
+            );
+          },
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  ),
+ );
+}
 }
 
 
