@@ -25,7 +25,7 @@ class EventDetailScreen extends StatelessWidget {
           'Events',
           style:GoogleFonts.aBeeZee(
             textStyle: const TextStyle(
-              color: Color.fromARGB(255, 33, 92, 186),
+              color: Colors.white,
               letterSpacing: .5,
               fontSize: 35,
               fontWeight: FontWeight.w800,
@@ -52,7 +52,7 @@ class EventDetailScreen extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 33, 92, 186),
+                color: Colors.white,
               ),
             ),
 
@@ -70,7 +70,7 @@ class EventDetailScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 33, 92, 186),
+                color: Colors.white,
               ),
             ),
             const SizedBox(height:20),
