@@ -1,5 +1,10 @@
+import 'package:bdcoe/bloc/team_bloc.dart';
+import 'package:bdcoe/bloc/team_event.dart';
+import 'package:bdcoe/bloc/team_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Team extends StatefulWidget {
   const Team({super.key});
@@ -11,21 +16,114 @@ class Team extends StatefulWidget {
 class _TeamState extends State<Team> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    final memberBloc = BlocProvider.of<MemberBloc>(context);
+    memberBloc.add(FetchMembers());
+
+    return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child:Text(
-                  'Team',
-                  style: GoogleFonts.aBeeZee(
-          textStyle: const TextStyle(
-            color: Color.fromARGB(255, 245, 242, 246),
-            letterSpacing: .5,
-            fontSize: 35,
-            fontWeight: FontWeight.w500,
-          ),
-                  ),
+      body: BlocBuilder<MemberBloc, MemberState>(
+        builder: (context, state) {
+          if (state is MemberLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is MemberLoaded) {
+            return GridView.builder(
+  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+     crossAxisCount: 2, // Number of columns
+    crossAxisSpacing: 8.0,
+    mainAxisSpacing: 8.0,
+    childAspectRatio: 0.8,
+  ),
+  itemCount: state.members.length,
+  itemBuilder: (context, index) {
+    final member = state.members[index];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+       
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
             ),
+          ],
+          image: DecorationImage(
+            image: AssetImage('assets/teambck.png'), // Path to your PNG image
+            fit: BoxFit.cover, // Adjust the image to cover the container
+          ),
+        ),
+            child: Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    CircleAvatar(
+      backgroundImage: NetworkImage(member['imageUrl']),
+      radius: 45,
+    ),
+    SizedBox(height: 10,),
+    
+    SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Text(
+        member['fullname'] ?? 'Unknown',
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        overflow: TextOverflow.ellipsis, // Optional: adds an ellipsis when not scrolling
+      ),
+    ),
+   
+    Text(
+      member['domain'] ?? 'Unknown',
+      style: const TextStyle(color: Colors.grey),
+    ),
+   
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Icon(Icons.person),
+          onPressed: () {
+            _launchUrl('https://www.linkedin.com/in/${member['linkedin']}');
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.code),
+          onPressed: () {
+            _launchUrl('https://github.com/${member['github']}');
+          },
+        ),
+      ],
+    ),
+  ],
+),
+                ),
+               );
+              },
+           );
+
+          } else if (state is MemberError) {
+            return Center(child: Text('Error: ${state.error}'));
+          }
+          return const Center(child: Text('No data found.'));
+        },
       ),
     );
+  }
+
+  void _launchUrl(String url) async {
+    // ignore: deprecated_member_use
+    if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
