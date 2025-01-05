@@ -54,7 +54,7 @@ class _TeamState extends State<Team> {
                 'Our Team',
                 style: GoogleFonts.aBeeZee(
                   textStyle: const TextStyle(
-                    color: Color.fromARGB(255, 206, 150, 227),
+                    color:  Color.fromARGB(255, 33, 92, 186),
                     letterSpacing: .5,
                     fontSize: 35,
                     fontWeight: FontWeight.w500,
