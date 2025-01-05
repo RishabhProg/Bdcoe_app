@@ -17,7 +17,7 @@ class _TeamState extends State<Team> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MemberBloc>(context).add(FetchMembers(2027));
+    BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year + 2));
   }
 
   final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini'];
