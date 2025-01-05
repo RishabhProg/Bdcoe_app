@@ -26,3 +26,12 @@ class MemberError extends MemberState {
   @override
   List<Object?> get props => [error];
 }
+
+class DropdownChangedstate extends MemberState {
+  final String selected_year;
+
+  DropdownChangedstate(this.selected_year);
+
+  @override
+  List<Object?> get props => [selected_year];
+}

@@ -17,7 +17,8 @@ void main() {
       child: MultiBlocProvider(
         providers: [
          
-          BlocProvider(create: (context) => MemberBloc())
+          BlocProvider(create: (context) => MemberBloc()),
+          BlocProvider(create: (context) => DropdownBloc())
           
         ],
         child: const MyApp(),
