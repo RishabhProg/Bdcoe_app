@@ -13,15 +13,14 @@ class Domain extends StatefulWidget {
 
 class _DomainState extends State<Domain> {
   final List<Map<String, String>> domains = [
-    {'image': 'assets/firstdomain.png', 'title': 'Big Data','description': 'assets/des1.txt' },
-    {'image': 'assets/domain2.png', 'title': 'Machine Learning','description': 'assets/des2.txt'},
-    {'image': 'assets/domain1.png', 'title': 'Competitive Programming','description':'assets/des3.txt'},
-    {'image': 'assets/domain5.png', 'title': 'App Development','description':'assets/des4.txt'},
-    {'image': 'assets/domain4.png', 'title': 'Web Development','description':'assets/des5.txt'},
-    {'image': 'assets/domain3.png', 'title': 'UI/UX Designing','description':'assets/des6.txt'},
-
-
+    {'image': 'assets/firstdomain.png', 'title': 'Big Data', 'description': 'assets/des1.txt'},
+    {'image': 'assets/domain2.png', 'title': 'Machine Learning', 'description': 'assets/des2.txt'},
+    {'image': 'assets/domain1.png', 'title': 'Competitive Programming', 'description': 'assets/des3.txt'},
+    {'image': 'assets/domain5.png', 'title': 'App Development', 'description': 'assets/des4.txt'},
+    {'image': 'assets/domain4.png', 'title': 'Web Development', 'description': 'assets/des5.txt'},
+    {'image': 'assets/domain3.png', 'title': 'UI/UX Designing', 'description': 'assets/des6.txt'},
   ];
+
   List<String> descriptions = List.filled(6, "");
 
   @override
@@ -101,61 +100,64 @@ class _DomainState extends State<Domain> {
               ),
             ),
             Center(
-              child: RichText(
-                text: const TextSpan(
-                  style: TextStyle(fontSize: 24),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'We',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' Learn',
-                      style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' | We',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' Develop',
-                      style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: ' | We',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double fontSize = constraints.maxWidth * 0.06;
 
-                      ),
+                  return RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(fontSize: fontSize),
+                      children: <TextSpan>[
+                        const TextSpan(
+                          text: 'We',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' Learn',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' | We',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' Develop',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' | We',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: ' Execute',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: ' Execute',
-                      style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
+                  );
+                },
               ),
-
             ),
             const SizedBox(height: 50),
-
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -170,91 +172,86 @@ class _DomainState extends State<Domain> {
                 ),
               ),
             ),
-
             ListView.builder(
               shrinkWrap: true,
-              physics:const NeverScrollableScrollPhysics(),
-
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: domains.length,
               itemBuilder: (context, index) {
                 return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child:FlipCard(
-                  front:SizedBox(
-                    height:200,
-                    child:Card(
-                  color: Colors.grey[800],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        domains[index]['image']!,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      const SizedBox(height: 10),
-                      // Domain title
-                      Text(
-                        domains[index]['title']!,
-                        style: GoogleFonts.aBeeZee(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  padding: const EdgeInsets.symmetric(vertical: 0.0),
+                  child: FlipCard(
+                    front: SizedBox(
+                      height: 200,
+                      child: Card(
+                        color: Colors.grey[800],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                      ),
-                    ],
-                  ),
-                  ),
-                  ),
-                  back: Container(
-                  height:200,
-                  child:Card(
-                    color: Colors.grey[800],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 5,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SingleChildScrollView(
-                          child: SizedBox(
-                            width: double.infinity, 
-                            child: Text(
-                              descriptions[index],  
+                        elevation: 5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              domains[index]['image']!,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              domains[index]['title']!,
                               style: GoogleFonts.aBeeZee(
                                 textStyle: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    back: Container(
+                      height: 200,
+                      child: Card(
+                        color: Colors.grey[800],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 5,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SingleChildScrollView(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  descriptions[index],
+                                  style: GoogleFonts.aBeeZee(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            );
-          },
+                );
+              },
+            ),
+          ],
         ),
-      ],
-    ),
-  ),
- );
+      ),
+    );
+  }
 }
-}
-
-
