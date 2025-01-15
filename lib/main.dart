@@ -1,12 +1,19 @@
 import 'package:bdcoe/bloc/team_bloc.dart';
+import 'package:bdcoe/firebase_options.dart';
 import 'package:bdcoe/models/nav_provider.dart';
 import 'package:bdcoe/models/scanner_provider.dart';
+//import 'package:bdcoe/ui/signUp.dart';
 import 'package:bdcoe/ui/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(
     MultiProvider(
       providers: [

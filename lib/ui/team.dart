@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:bdcoe/bloc/team_bloc.dart';
 import 'package:bdcoe/bloc/team_event.dart';
 import 'package:bdcoe/bloc/team_state.dart';
@@ -17,10 +18,18 @@ class _TeamState extends State<Team> {
   @override
   void initState() {
     super.initState();
+    // Initial load of data from the cached or API based on year
     BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year + 2));
   }
 
-  final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini'];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reset the dropdown value to '2nd Year' whenever the screen is reloaded
+    context.read<DropdownBloc>().add(Dropdownchangedevent('2nd Year'));
+  }
+
+  final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini', 'Faculty'];
   final Map<String, int> yearMap = {
     '2nd Year': DateTime.now().year + 2,
     '3rd Year': DateTime.now().year + 1,
@@ -54,7 +63,7 @@ class _TeamState extends State<Team> {
                 'Our Team',
                 style: GoogleFonts.aBeeZee(
                   textStyle: const TextStyle(
-                    color:  Color.fromARGB(255, 33, 92, 186),
+                    color: Color.fromARGB(255, 33, 92, 186),
                     letterSpacing: .5,
                     fontSize: 35,
                     fontWeight: FontWeight.w500,
@@ -92,8 +101,12 @@ class _TeamState extends State<Team> {
                     }).toList(),
                     onChanged: (value) {
                       if (value != null) {
-                        context.read<DropdownBloc>().add(Dropdownchangedevent(value));
-                        context.read<MemberBloc>().add(FetchMembers(yearMap[value]!));
+                        if (value == 'Faculty') {
+                          _showFacultyDialog();
+                        } else {
+                          context.read<DropdownBloc>().add(Dropdownchangedevent(value));
+                          context.read<MemberBloc>().add(FetchMembers(yearMap[value]!));
+                        }
                       }
                     },
                   ),
@@ -203,5 +216,57 @@ class _TeamState extends State<Team> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  void _showFacultyDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text(
+            'Our Faculty',
+            style: GoogleFonts.aBeeZee(textStyle: const TextStyle(color: Colors.white)),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                _facultyMember(
+                  'Dr. Ruchi Gupta',
+                  'https://www.akgec.ac.in/wp-content/uploads/2023/04/RUCHI-GUPTA.jpg',
+                ),
+                _facultyMember(
+                  'Mr. Amit Sharma',
+                  'https://res.cloudinary.com/dhy42cidp/image/upload/v1729435141/ytazhk1sgbv8do71fga6.jpg',
+                ),
+                _facultyMember(
+                  'Mr. Ropak Kumar',
+                  'https://ucarecdn.com/599d1a82-3ca2-4426-bd09-3d01f0625ef6/-/preview/311x376/',
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _facultyMember(String name, String imageUrl) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
   }
 }

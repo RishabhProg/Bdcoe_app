@@ -10,12 +10,12 @@ class NavProvider extends ChangeNotifier {
   final _items = <Widget>[
    const Icon(Icons.home, size: 30, color: Colors.black),
    const Icon(Icons.qr_code, size: 30, color: Colors.black),
-   const Icon(Icons.photo_album, size: 30, color: Colors.black),
+  // const Icon(Icons.photo_album, size: 30, color: Colors.black),
    const Icon(Icons.auto_awesome_rounded,size: 30, color: Colors.black),
    const Icon(Icons.person, size: 30, color: Colors.black),
   ];
 
-  final _screen = [const Domain(), const scan(),const Achievement(),const Events(),const Team()];
+  final _screen = [const Domain(), const scan(),/*const Achievement(),*/const Events(),const Team()];
   int _index = 0;
 
   List<Widget> get items => _items;

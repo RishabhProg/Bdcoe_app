@@ -1,87 +1,3 @@
-
-// //////////////////////////////////////////////////////////////////////////bloc
-// import 'dart:convert';
-// import 'package:bdcoe/bloc/team_event.dart';
-// import 'package:bdcoe/bloc/team_state.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:http/http.dart' as http;
-
-// class MemberBloc extends Bloc<MemberEvent, MemberState> {
-//   MemberBloc() : super(MemberInitial()) {
-//     on<FetchMembers>(_fetchMembers);
-//   }
-
-//   Future<void> _fetchMembers(
-//       FetchMembers event, Emitter<MemberState> emit) async {
-//     emit(MemberLoading());
-//     try {
-//       final response = await http.get(
-//         Uri.parse('https://bdcoe-backend.vercel.app/api/v1/member'),
-//       );
-//       if (response.statusCode == 200) {
-//         final jsonResponse = json.decode(response.body);
-//         final members = List<Map<String, dynamic>>.from(jsonResponse['data']);
-//         final filteredMembers =
-//             members.where((member) => member['graduation'] == 2027).toList();
-
-//         emit(MemberLoaded(filteredMembers));
-//       } else {
-//         emit(MemberError('Failed to fetch members'));
-//       }
-//     } catch (e) {
-//       print(e.toString());
-//       emit(MemberError(e.toString()));
-//     }
-//   }
-// }
-
-
-// /////////////////////////////////////////////////////////////////state
-// import 'package:equatable/equatable.dart';
-
-// abstract class MemberState extends Equatable {
-//   @override
-//   List<Object?> get props => [];
-// }
-
-// class MemberInitial extends MemberState {}
-
-// class MemberLoading extends MemberState {}
-
-// class MemberLoaded extends MemberState {
-//   final List<Map<String, dynamic>> members;
-
-//   MemberLoaded(this.members);
-
-//   @override
-//   List<Object?> get props => [members];
-// }
-
-// class MemberError extends MemberState {
-//   final String error;
-
-//   MemberError(this.error);
-
-//   @override
-//   List<Object?> get props => [error];
-// }
-
-
-
-// //////////////////////////////////////////////////////////event
-// import 'package:equatable/equatable.dart';
-
-// abstract class MemberEvent extends Equatable {
-//   @override
-//   List<Object?> get props => [];
-// }
-
-// class FetchMembers extends MemberEvent {}
-
-
-
-
-// /////////////////////////////////////////////////////////////////////ui
 // import 'package:bdcoe/bloc/team_bloc.dart';
 // import 'package:bdcoe/bloc/team_event.dart';
 // import 'package:bdcoe/bloc/team_state.dart';
@@ -101,8 +17,24 @@
 //   @override
 //   void initState() {
 //     super.initState();
-//     BlocProvider.of<MemberBloc>(context).add(FetchMembers());
+//     BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year + 2));
 //   }
+
+//   final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini'];
+//   final Map<String, int> yearMap = {
+//     '2nd Year': DateTime.now().year + 2,
+//     '3rd Year': DateTime.now().year + 1,
+//     '4rth Year': DateTime.now().year,
+//     'Alumini': 420
+//   };
+//   final Map<String, String> domain = {
+//     'AD': 'App Developer',
+//     'ML': 'Machine Learning',
+//     'FE': 'Frontend',
+//     'FS': 'Fullstack',
+//     'BE': 'Backend',
+//     'DE': 'Designer',
+//   };
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -111,143 +43,220 @@
 
 //     return Scaffold(
 //       backgroundColor: Colors.black,
-//       body: BlocBuilder<MemberBloc, MemberState>(
-//         builder: (context, state) {
-//           if (state is MemberLoading) {
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (state is MemberLoaded) {
-//             return GridView.builder(
-//               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                 crossAxisCount: 2, // Number of columns
-//                 crossAxisSpacing: 8.0,
-//                 mainAxisSpacing: 8.0,
-//                 childAspectRatio: 0.8,
+//       body: SafeArea(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             SizedBox(height: height * 0.03),
+//             Padding(
+//               padding: EdgeInsets.only(left: width * 0.05),
+//               child: Text(
+//                 'Our Team',
+//                 style: GoogleFonts.aBeeZee(
+//                   textStyle: const TextStyle(
+//                     color:  Color.fromARGB(255, 33, 92, 186),
+//                     letterSpacing: .5,
+//                     fontSize: 35,
+//                     fontWeight: FontWeight.w500,
+//                   ),
+//                 ),
 //               ),
-//               itemCount: state.members.length,
-//               itemBuilder: (context, index) {
-//                 final member = state.members[index];
+//             ),
+//             SizedBox(height: height * 0.01),
+//             BlocBuilder<DropdownBloc, DropdownChangedstate>(
+//               builder: (context, state) {
 //                 return Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Container(
-//                     padding: const EdgeInsets.all(16.0),
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(10),
-//                       color: Colors.white,
-//                       boxShadow: [
-//                         BoxShadow(
-//                           color: Colors.grey.withOpacity(0.3),
-//                           blurRadius: 5,
-//                           offset: const Offset(0, 2),
-//                         ),
-//                       ],
-//                       image: DecorationImage(
-//                         image: AssetImage('assets/teambck.png'),
-//                         fit: BoxFit.cover,
+//                   padding: EdgeInsets.only(right: width * 0.6, left: width * 0.05),
+//                   child: DropdownButtonFormField<String>(
+//                     value: state.selected_year,
+//                     decoration: InputDecoration(
+//                       filled: true,
+//                       fillColor: Colors.grey[900],
+//                       border: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(12),
+//                         borderSide: const BorderSide(color: Colors.grey, width: 1),
+//                       ),
+//                       enabledBorder: OutlineInputBorder(
+//                         borderRadius: BorderRadius.circular(12),
+//                         borderSide: const BorderSide(color: Colors.grey, width: 1),
 //                       ),
 //                     ),
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         CircleAvatar(
-//                           backgroundImage: NetworkImage(member['imageUrl']),
-//                           radius: 45,
-//                         ),
-//                         SizedBox(height: 10),
-//                         SingleChildScrollView(
-//                           scrollDirection: Axis.horizontal,
-//                           child: Text(
-//                             member['fullname'] ?? 'Unknown',
-//                             style: const TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                             overflow: TextOverflow.ellipsis,
-//                           ),
-//                         ),
-//                         Text(
-//                           member['domain'] ?? 'Unknown',
-//                           style: const TextStyle(color: Colors.grey),
-//                         ),
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: [
-//                             IconButton(
-//                               icon: Icon(Icons.person),
-//                               onPressed: () {
-//                                 _launchUrl(
-//                                     'https://www.linkedin.com/in/${member['linkedin']}');
-//                               },
-//                             ),
-//                             IconButton(
-//                               icon: const Icon(Icons.code),
-//                               onPressed: () {
-//                                 _launchUrl(
-//                                     'https://github.com/${member['github']}');
-//                               },
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
+//                     dropdownColor: Colors.grey[850],
+//                     style: const TextStyle(color: Colors.white, fontSize: 16),
+//                     icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+//                     items: items.map((item) {
+//                       return DropdownMenuItem<String>(
+//                         value: item,
+//                         child: Text(item, style: const TextStyle(color: Colors.white)),
+//                       );
+//                     }).toList(),
+//                     onChanged: (value) {
+//                       if (value != null) {
+//                         context.read<DropdownBloc>().add(Dropdownchangedevent(value));
+//                         context.read<MemberBloc>().add(FetchMembers(yearMap[value]!));
+//                       }
+//                     },
 //                   ),
 //                 );
 //               },
-//             );
-//           } else if (state is MemberError) {
-//             return Center(child: Text('Error: ${state.error}'));
-//           }
-//           return const Center(child: Text('No data found.'));
-//         },
+//             ),
+//             SizedBox(height: height * 0.01),
+//             BlocBuilder<MemberBloc, MemberState>(
+//               builder: (context, state) {
+//                 if (state is MemberLoading) {
+//                   return const Center(child: CircularProgressIndicator());
+//                 } else if (state is MemberLoaded) {
+//                   return Expanded(
+//                     child: GridView.builder(
+//                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: 2,
+//                         crossAxisSpacing: 8.0,
+//                         mainAxisSpacing: 8.0,
+//                         childAspectRatio: 0.8,
+//                       ),
+//                       itemCount: state.members.length,
+//                       itemBuilder: (context, index) {
+//                         final member = state.members[index];
+//                         return Padding(
+//                           padding: const EdgeInsets.all(8.0),
+//                           child: Container(
+//                             padding: const EdgeInsets.all(16.0),
+//                             decoration: BoxDecoration(
+//                               borderRadius: BorderRadius.circular(10),
+//                               color: Colors.white,
+//                               boxShadow: [
+//                                 BoxShadow(
+//                                   color: Colors.grey.withOpacity(0.3),
+//                                   blurRadius: 5,
+//                                   offset: const Offset(0, 2),
+//                                 ),
+//                               ],
+//                               image: const DecorationImage(
+//                                 image: AssetImage('assets/teambck.png'),
+//                                 fit: BoxFit.cover,
+//                               ),
+//                             ),
+//                             child: Column(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               children: [
+//                                 CircleAvatar(
+//                                   backgroundImage: NetworkImage(member['imageUrl']),
+//                                   radius: 45,
+//                                 ),
+//                                 const SizedBox(height: 10),
+//                                 SingleChildScrollView(
+//                                   scrollDirection: Axis.horizontal,
+//                                   child: Text(
+//                                     member['fullname'] ?? 'Unknown',
+//                                     style: const TextStyle(
+//                                       fontSize: 18,
+//                                       fontWeight: FontWeight.bold,
+//                                     ),
+//                                     overflow: TextOverflow.ellipsis,
+//                                   ),
+//                                 ),
+//                                 Text(
+//                                   domain[member['domain']] ?? 'Unknown',
+//                                   style: const TextStyle(color: Colors.grey),
+//                                 ),
+//                                 Row(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: [
+//                                     IconButton(
+//                                       icon: const Icon(Icons.person),
+//                                       onPressed: () {
+//                                         _launchUrl(
+//                                             'https://www.linkedin.com/in/${member['linkedin']}');
+//                                       },
+//                                     ),
+//                                     IconButton(
+//                                       icon: const Icon(Icons.code),
+//                                       onPressed: () {
+//                                         _launchUrl(
+//                                             'https://github.com/${member['github']}');
+//                                       },
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         );
+//                       },
+//                     ),
+//                   );
+//                 } else if (state is MemberError) {
+//                   return Center(child: Text('Error: ${state.error}'));
+//                 }
+//                 return const Center(child: Text('No data found.'));
+//               },
+//             ),
+//           ],
+//         ),
 //       ),
 //     );
 //   }
 
 //   void _launchUrl(String url) async {
-//     // ignore: deprecated_member_use
 //     if (await canLaunch(url)) {
-//       // ignore: deprecated_member_use
 //       await launch(url);
 //     } else {
 //       throw 'Could not launch $url';
 //     }
 //   }
 // }
-// import 'package:flutter/material.dart';
+// ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// import 'dart:convert';
+// import 'package:bdcoe/bloc/team_event.dart';
+// import 'package:bdcoe/bloc/team_state.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'dropdown_bloc.dart';
-// import 'dropdown_event.dart';
-// import 'dropdown_state.dart';
+// import 'package:http/http.dart' as http;
 
-// class DropdownScreen extends StatelessWidget {
-//   final List<String> items = ['Item 1', 'Item 2', 'Item 3'];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocProvider(
-//       create: (_) => DropdownBloc(),
-//       child: Scaffold(
-//         appBar: AppBar(title: Text('Dropdown with BLoC')),
-//         body: Center(
-//           child: BlocBuilder<DropdownBloc, DropdownState>(
-//             builder: (context, state) {
-//               return DropdownButton<String>(
-//                 value: state.selectedItem,
-//                 items: items.map((item) {
-//                   return DropdownMenuItem<String>(
-//                     value: item,
-//                     child: Text(item),
-//                   );
-//                 }).toList(),
-//                 onChanged: (value) {
-//                   if (value != null) {
-//                     context.read<DropdownBloc>().add(DropdownChanged(value));
-//                   }
-//                 },
-//               );
-//             },
-//           ),
-//         ),
-//       ),
-//     );
+// class DropdownBloc extends Bloc<Dropdownchangedevent, DropdownChangedstate> {
+//   DropdownBloc() : super(DropdownChangedstate('2nd Year')) {
+//     on<Dropdownchangedevent>((event, emit) {
+//       emit(DropdownChangedstate(event.newValue));
+//     });
 //   }
 // }
+
+// class MemberBloc extends Bloc<MemberEvent, MemberState> {
+//   MemberBloc() : super(MemberInitial()) {
+//     on<FetchMembers>(_fetchMembers);
+//   }
+
+//   Future<void> _fetchMembers(
+//       FetchMembers event, Emitter<MemberState> emit) async {
+//     emit(MemberLoading());
+//     try {
+//       final response = await http.get(
+//         Uri.parse('https://bdcoe-backend.vercel.app/api/v1/member'),
+//       );
+//       if (response.statusCode == 200) {
+//         final jsonResponse = json.decode(response.body);
+//         final members = List<Map<String, dynamic>>.from(jsonResponse['data']);
+//         if (event.year == 420) {
+//           final filteredMembers = members
+//               .where(
+//                   (member) => member['graduation'] <= DateTime.now().year - 1)
+//               .toList();
+//           emit(MemberLoaded(filteredMembers));
+//         } else {
+//           final filteredMembers = members
+//               .where((member) => member['graduation'] == event.year)
+//               .toList();
+//           emit(MemberLoaded(filteredMembers));
+//         }
+//       } else {
+//         emit(MemberError('Failed to fetch members'));
+//       }
+//       print("api fetched");
+//     } catch (e) {
+//       print(e.toString());
+//       emit(MemberError(e.toString()));
+//     }
+//   }
+// }
+

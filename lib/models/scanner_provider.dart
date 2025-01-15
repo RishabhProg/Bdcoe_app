@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:vibration/vibration.dart';
 
 class ScannerProvider extends ChangeNotifier {
   bool _isScanning = true;
+  User? currentUser;
   String? _apiData;
 
   String? get apiData => _apiData;
@@ -16,6 +18,14 @@ class ScannerProvider extends ChangeNotifier {
   void changeScanner() {
     _isScanning = !_isScanning;
     notifyListeners();
+  }
+
+  void checkAuthentication() {
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      currentUser = user;
+        notifyListeners();
+    });
+   
   }
 
   Future<void> sendDataToApi(String scannedData) async {

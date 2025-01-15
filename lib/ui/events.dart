@@ -5,6 +5,7 @@ import '../blocs/event_detail/event_detail_bloc.dart';
 import '../blocs/event_detail/event_detail_event.dart';
 import '../blocs/event_detail/event_detail_state.dart';
 import 'package:bdcoe/ui/eventdetail.dart';
+
 class Events extends StatelessWidget {
   const Events({super.key});
 
@@ -30,17 +31,17 @@ class Events extends StatelessWidget {
                       children: [
                         Text(
                           'Events', // Title text
-                          style:GoogleFonts.aBeeZee(
-                          textStyle: const TextStyle(
-                            color: Color.fromARGB(255, 33, 92, 186),
-                            letterSpacing: .5,
-                            fontSize: 35,
-                            fontWeight: FontWeight.w800,
+                          style: GoogleFonts.aBeeZee(
+                            textStyle: const TextStyle(
+                              color: Color.fromARGB(255, 33, 92, 186),
+                              letterSpacing: .5,
+                              fontSize: 35,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
-                      ),
                         const SizedBox(height: 16),
-        
+
                         // Display image from assets
                         Center(
                           child: Image.asset(
@@ -50,9 +51,9 @@ class Events extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-        
+
                         const SizedBox(height: 16),
-        
+
                         const Text(
                           'Key Events We Hosted:',
                           style: TextStyle(
@@ -92,27 +93,27 @@ class Events extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder:(context) => EventDetailScreen(
-                                      event:event,
+                                    builder: (context) => EventDetailScreen(
+                                      event: event,
                                       selectedImage: event['poster'],
                                     ),
                                   ),
                                 );
                               },
-                            child: Card(
-                              child: Image.network(
-                                event['poster'] ?? '',
-                                fit: BoxFit.cover,
+                              child: Card(
+                                child: Image.network(
+                                  event['poster'] ?? '',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else if (state is EventError) {
+                );
+              } else if (state is EventError) {
                 return Center(
                   child: Text(
                     state.message,
