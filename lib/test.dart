@@ -1,262 +1,253 @@
-// import 'package:bdcoe/bloc/team_bloc.dart';
-// import 'package:bdcoe/bloc/team_event.dart';
-// import 'package:bdcoe/bloc/team_state.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:google_fonts/google_fonts.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
-// class Team extends StatefulWidget {
-//   const Team({super.key});
+// class EventDetailScreen extends StatelessWidget {
+//   final Map<String, dynamic> event;
+//   final String selectedImage;
 
-//   @override
-//   State<Team> createState() => _TeamState();
-// }
-
-// class _TeamState extends State<Team> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year + 2));
-//   }
-
-//   final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini'];
-//   final Map<String, int> yearMap = {
-//     '2nd Year': DateTime.now().year + 2,
-//     '3rd Year': DateTime.now().year + 1,
-//     '4rth Year': DateTime.now().year,
-//     'Alumini': 420
-//   };
-//   final Map<String, String> domain = {
-//     'AD': 'App Developer',
-//     'ML': 'Machine Learning',
-//     'FE': 'Frontend',
-//     'FS': 'Fullstack',
-//     'BE': 'Backend',
-//     'DE': 'Designer',
-//   };
+//   const EventDetailScreen({super.key, required this.event, required this.selectedImage});
 
 //   @override
 //   Widget build(BuildContext context) {
-//     double width = MediaQuery.of(context).size.width;
-//     double height = MediaQuery.of(context).size.height;
+//     List<dynamic> eventPhotos = event['images'] ?? [];
+//     String eventImage = (eventPhotos.isNotEmpty)
+//         ? eventPhotos[eventPhotos.length - 1]
+//         : '';
 
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: SingleChildScrollView(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   'Events',
+//                   style: GoogleFonts.aBeeZee(
+//                     textStyle: const TextStyle(
+//                       color: Colors.white,
+//                       letterSpacing: .5,
+//                       fontSize: 35,
+//                       fontWeight: FontWeight.w800,
+//                     ),
+//                   ),
+//                 ),
+//                 const SizedBox(height: 30),
+//                 Center(
+//                   child: eventImage.isNotEmpty
+//                       ? Image.network(
+//                           eventImage,
+//                           height: 200,
+//                           fit: BoxFit.cover,
+//                         )
+//                       : const Text(
+//                           'No Image Available',
+//                           style: TextStyle(color: Colors.white),
+//                         ),
+//                 ),
+//                 const SizedBox(height: 35),
+
+//                 Text(
+//                   event['eventname'] ?? 'Unnamed Event',
+//                   style: const TextStyle(
+//                     fontSize: 24,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+
+//                 const SizedBox(height: 20),
+//                 Text(
+//                   event['description'] ?? 'No description available',
+//                   style: const TextStyle(
+//                     fontSize: 16,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 50),
+//                 const Text(
+//                   'Event Photos',
+//                   style: TextStyle(
+//                     fontSize: 24,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//                 const SizedBox(height: 20),
+
+//                 eventPhotos.isNotEmpty && eventPhotos.any((photo) => photo != null && photo.isNotEmpty)
+//                     ? GridView.builder(
+//                         shrinkWrap: true,
+//                         physics: const NeverScrollableScrollPhysics(),
+//                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                           crossAxisCount: 2,
+//                           crossAxisSpacing: 8,
+//                           mainAxisSpacing: 8,
+//                           childAspectRatio: 1,
+//                         ),
+//                         itemCount: eventPhotos.length,
+//                         itemBuilder: (context, index) {
+//                           final photo = eventPhotos[index];
+//                           return photo != null && photo.isNotEmpty
+//                               ? Image.network(
+//                                   photo,
+//                                   fit: BoxFit.cover,
+//                                 )
+//                               : const Text(
+//                                   'Invalid Photo',
+//                                   style: TextStyle(color: Colors.white),
+//                                 );
+//                         },
+//                       )
+//                     : const Text(
+//                         'No Photos Available',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//       backgroundColor: Colors.black,
+//     );
+//   }
+// }
+// ////////////////////////////////////////////////////////////////////////////////////
+// ///import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:google_fonts/google_fonts.dart';
+// import '../blocs/event_detail/event_detail_bloc.dart';
+// import '../blocs/event_detail/event_detail_event.dart';
+// import '../blocs/event_detail/event_detail_state.dart';
+// import 'package:bdcoe/ui/eventdetail.dart';
+
+// class Events extends StatelessWidget {
+//   const Events({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
 //     return Scaffold(
 //       backgroundColor: Colors.black,
 //       body: SafeArea(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             SizedBox(height: height * 0.03),
-//             Padding(
-//               padding: EdgeInsets.only(left: width * 0.05),
-//               child: Text(
-//                 'Our Team',
-//                 style: GoogleFonts.aBeeZee(
-//                   textStyle: const TextStyle(
-//                     color:  Color.fromARGB(255, 33, 92, 186),
-//                     letterSpacing: .5,
-//                     fontSize: 35,
-//                     fontWeight: FontWeight.w500,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: height * 0.01),
-//             BlocBuilder<DropdownBloc, DropdownChangedstate>(
-//               builder: (context, state) {
-//                 return Padding(
-//                   padding: EdgeInsets.only(right: width * 0.6, left: width * 0.05),
-//                   child: DropdownButtonFormField<String>(
-//                     value: state.selected_year,
-//                     decoration: InputDecoration(
-//                       filled: true,
-//                       fillColor: Colors.grey[900],
-//                       border: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                         borderSide: const BorderSide(color: Colors.grey, width: 1),
-//                       ),
-//                       enabledBorder: OutlineInputBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                         borderSide: const BorderSide(color: Colors.grey, width: 1),
-//                       ),
-//                     ),
-//                     dropdownColor: Colors.grey[850],
-//                     style: const TextStyle(color: Colors.white, fontSize: 16),
-//                     icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-//                     items: items.map((item) {
-//                       return DropdownMenuItem<String>(
-//                         value: item,
-//                         child: Text(item, style: const TextStyle(color: Colors.white)),
-//                       );
-//                     }).toList(),
-//                     onChanged: (value) {
-//                       if (value != null) {
-//                         context.read<DropdownBloc>().add(Dropdownchangedevent(value));
-//                         context.read<MemberBloc>().add(FetchMembers(yearMap[value]!));
-//                       }
-//                     },
-//                   ),
+//         child: BlocProvider(
+//           create: (context) => EventBloc()..add(FetchEvents()),
+//           child: BlocBuilder<EventBloc, EventState>(
+//             builder: (context, state) {
+//               if (state is EventLoading) {
+//                 return const Center(
+//                   child: CircularProgressIndicator(),
 //                 );
-//               },
-//             ),
-//             SizedBox(height: height * 0.01),
-//             BlocBuilder<MemberBloc, MemberState>(
-//               builder: (context, state) {
-//                 if (state is MemberLoading) {
-//                   return const Center(child: CircularProgressIndicator());
-//                 } else if (state is MemberLoaded) {
-//                   return Expanded(
-//                     child: GridView.builder(
-//                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//                         crossAxisCount: 2,
-//                         crossAxisSpacing: 8.0,
-//                         mainAxisSpacing: 8.0,
-//                         childAspectRatio: 0.8,
-//                       ),
-//                       itemCount: state.members.length,
-//                       itemBuilder: (context, index) {
-//                         final member = state.members[index];
-//                         return Padding(
-//                           padding: const EdgeInsets.all(8.0),
-//                           child: Container(
-//                             padding: const EdgeInsets.all(16.0),
-//                             decoration: BoxDecoration(
-//                               borderRadius: BorderRadius.circular(10),
-//                               color: Colors.white,
-//                               boxShadow: [
-//                                 BoxShadow(
-//                                   color: Colors.grey.withOpacity(0.3),
-//                                   blurRadius: 5,
-//                                   offset: const Offset(0, 2),
-//                                 ),
-//                               ],
-//                               image: const DecorationImage(
-//                                 image: AssetImage('assets/teambck.png'),
-//                                 fit: BoxFit.cover,
-//                               ),
-//                             ),
-//                             child: Column(
-//                               mainAxisAlignment: MainAxisAlignment.center,
-//                               children: [
-//                                 CircleAvatar(
-//                                   backgroundImage: NetworkImage(member['imageUrl']),
-//                                   radius: 45,
-//                                 ),
-//                                 const SizedBox(height: 10),
-//                                 SingleChildScrollView(
-//                                   scrollDirection: Axis.horizontal,
-//                                   child: Text(
-//                                     member['fullname'] ?? 'Unknown',
-//                                     style: const TextStyle(
-//                                       fontSize: 18,
-//                                       fontWeight: FontWeight.bold,
-//                                     ),
-//                                     overflow: TextOverflow.ellipsis,
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   domain[member['domain']] ?? 'Unknown',
-//                                   style: const TextStyle(color: Colors.grey),
-//                                 ),
-//                                 Row(
-//                                   mainAxisAlignment: MainAxisAlignment.center,
-//                                   children: [
-//                                     IconButton(
-//                                       icon: const Icon(Icons.person),
-//                                       onPressed: () {
-//                                         _launchUrl(
-//                                             'https://www.linkedin.com/in/${member['linkedin']}');
-//                                       },
-//                                     ),
-//                                     IconButton(
-//                                       icon: const Icon(Icons.code),
-//                                       onPressed: () {
-//                                         _launchUrl(
-//                                             'https://github.com/${member['github']}');
-//                                       },
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ],
+//               } else if (state is EventLoaded) {
+//                 return SingleChildScrollView(
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(16.0),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           'Events', // Title text
+//                           style: GoogleFonts.aBeeZee(
+//                             textStyle: const TextStyle(
+//                               color: Color.fromARGB(255, 33, 92, 186),
+//                               letterSpacing: .5,
+//                               fontSize: 35,
+//                               fontWeight: FontWeight.w800,
 //                             ),
 //                           ),
-//                         );
-//                       },
+//                         ),
+//                         const SizedBox(height: 16),
+
+//                         // Display image from assets
+//                         Center(
+//                           child: Image.asset(
+//                             width: double.infinity,
+//                             'assets/eventpage.png',
+//                             height: 200,
+//                             fit: BoxFit.cover,
+//                           ),
+//                         ),
+
+//                         const SizedBox(height: 16),
+
+//                         const Text(
+//                           'Key Events We Hosted:',
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 18,
+//                           ),
+//                         ),
+//                         const Text(
+//                           'Celebrating Innovation and',
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 18,
+//                           ),
+//                         ),
+//                         const Text(
+//                           'Collaboration',
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 18,
+//                           ),
+//                         ),
+//                         const SizedBox(height: 16),
+//                         GridView.builder(
+//                           shrinkWrap: true,
+//                           physics: const NeverScrollableScrollPhysics(),
+//                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                             crossAxisCount: 3,
+//                             crossAxisSpacing: 8,
+//                             mainAxisSpacing: 8,
+//                             childAspectRatio: 1,
+//                           ),
+//                           itemCount: state.events.length,
+//                           itemBuilder: (context, index) {
+//                             final event = state.events[index];
+//                             return InkWell(
+//                               onTap: () {
+//                                 Navigator.push(
+//                                   context,
+//                                   MaterialPageRoute(
+//                                     builder: (context) => EventDetailScreen(
+//                                       event: event,
+//                                       selectedImage: event['poster'],
+//                                     ),
+//                                   ),
+//                                 );
+//                               },
+//                               child: Card(
+//                                 child: Image.network(
+//                                   event['poster'] ?? '',
+//                                   fit: BoxFit.cover,
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         ),
+//                       ],
 //                     ),
-//                   );
-//                 } else if (state is MemberError) {
-//                   return Center(child: Text('Error: ${state.error}'));
-//                 }
-//                 return const Center(child: Text('No data found.'));
-//               },
-//             ),
-//           ],
+//                   ),
+//                 );
+//               } else if (state is EventError) {
+//                 return Center(
+//                   child: Text(
+//                     state.message,
+//                     style: const TextStyle(color: Colors.white),
+//                   ),
+//                 );
+//               } else {
+//                 return const Center(
+//                   child: Text(
+//                     'No events available',
+//                     style: TextStyle(color: Colors.white),
+//                   ),
+//                 );
+//               }
+//             },
+//           ),
 //         ),
 //       ),
 //     );
 //   }
-
-//   void _launchUrl(String url) async {
-//     if (await canLaunch(url)) {
-//       await launch(url);
-//     } else {
-//       throw 'Could not launch $url';
-//     }
-//   }
 // }
-// ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// import 'dart:convert';
-// import 'package:bdcoe/bloc/team_event.dart';
-// import 'package:bdcoe/bloc/team_state.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:http/http.dart' as http;
-
-// class DropdownBloc extends Bloc<Dropdownchangedevent, DropdownChangedstate> {
-//   DropdownBloc() : super(DropdownChangedstate('2nd Year')) {
-//     on<Dropdownchangedevent>((event, emit) {
-//       emit(DropdownChangedstate(event.newValue));
-//     });
-//   }
-// }
-
-// class MemberBloc extends Bloc<MemberEvent, MemberState> {
-//   MemberBloc() : super(MemberInitial()) {
-//     on<FetchMembers>(_fetchMembers);
-//   }
-
-//   Future<void> _fetchMembers(
-//       FetchMembers event, Emitter<MemberState> emit) async {
-//     emit(MemberLoading());
-//     try {
-//       final response = await http.get(
-//         Uri.parse('https://bdcoe-backend.vercel.app/api/v1/member'),
-//       );
-//       if (response.statusCode == 200) {
-//         final jsonResponse = json.decode(response.body);
-//         final members = List<Map<String, dynamic>>.from(jsonResponse['data']);
-//         if (event.year == 420) {
-//           final filteredMembers = members
-//               .where(
-//                   (member) => member['graduation'] <= DateTime.now().year - 1)
-//               .toList();
-//           emit(MemberLoaded(filteredMembers));
-//         } else {
-//           final filteredMembers = members
-//               .where((member) => member['graduation'] == event.year)
-//               .toList();
-//           emit(MemberLoaded(filteredMembers));
-//         }
-//       } else {
-//         emit(MemberError('Failed to fetch members'));
-//       }
-//       print("api fetched");
-//     } catch (e) {
-//       print(e.toString());
-//       emit(MemberError(e.toString()));
-//     }
-//   }
-// }
-

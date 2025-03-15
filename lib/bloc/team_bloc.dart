@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DropdownBloc extends Bloc<Dropdownchangedevent, DropdownChangedstate> {
-  DropdownBloc() : super(DropdownChangedstate('2nd Year')) {
+  DropdownBloc() : super(DropdownChangedstate('4th Year')) {
     on<Dropdownchangedevent>((event, emit) {
       emit(DropdownChangedstate(event.newValue));
     });

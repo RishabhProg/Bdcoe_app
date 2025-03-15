@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bdcoe/bloc/team_bloc.dart';
 import 'package:bdcoe/bloc/team_event.dart';
 import 'package:bdcoe/bloc/team_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,21 +20,27 @@ class _TeamState extends State<Team> {
   void initState() {
     super.initState();
     // Initial load of data from the cached or API based on year
-    BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year + 2));
+    BlocProvider.of<MemberBloc>(context).add(FetchMembers(DateTime.now().year));
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Reset the dropdown value to '2nd Year' whenever the screen is reloaded
-    context.read<DropdownBloc>().add(Dropdownchangedevent('2nd Year'));
+    context.read<DropdownBloc>().add(Dropdownchangedevent('4th Year'));
   }
 
-  final List<String> items = ['2nd Year', '3rd Year', '4rth Year', 'Alumini', 'Faculty'];
+  final List<String> items = [
+    '4th Year',
+    '3rd Year',
+    '2nd Year',
+    'Alumini',
+    'Faculty'
+  ];
   final Map<String, int> yearMap = {
-    '2nd Year': DateTime.now().year + 2,
+    '4th Year': DateTime.now().year,
     '3rd Year': DateTime.now().year + 1,
-    '4rth Year': DateTime.now().year,
+    '2nd Year': DateTime.now().year + 2,
     'Alumini': 420
   };
   final Map<String, String> domain = {
@@ -75,7 +82,8 @@ class _TeamState extends State<Team> {
             BlocBuilder<DropdownBloc, DropdownChangedstate>(
               builder: (context, state) {
                 return Padding(
-                  padding: EdgeInsets.only(right: width * 0.6, left: width * 0.05),
+                  padding:
+                      EdgeInsets.only(right: width * 0.6, left: width * 0.05),
                   child: DropdownButtonFormField<String>(
                     value: state.selected_year,
                     decoration: InputDecoration(
@@ -83,20 +91,24 @@ class _TeamState extends State<Team> {
                       fillColor: Colors.grey[900],
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.grey, width: 1),
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.grey, width: 1),
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1),
                       ),
                     ),
                     dropdownColor: Colors.grey[850],
                     style: const TextStyle(color: Colors.white, fontSize: 16),
-                    icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                    icon:
+                        const Icon(Icons.arrow_drop_down, color: Colors.white),
                     items: items.map((item) {
                       return DropdownMenuItem<String>(
                         value: item,
-                        child: Text(item, style: const TextStyle(color: Colors.white)),
+                        child: Text(item,
+                            style: const TextStyle(color: Colors.white)),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -104,8 +116,12 @@ class _TeamState extends State<Team> {
                         if (value == 'Faculty') {
                           _showFacultyDialog();
                         } else {
-                          context.read<DropdownBloc>().add(Dropdownchangedevent(value));
-                          context.read<MemberBloc>().add(FetchMembers(yearMap[value]!));
+                          context
+                              .read<DropdownBloc>()
+                              .add(Dropdownchangedevent(value));
+                          context
+                              .read<MemberBloc>()
+                              .add(FetchMembers(yearMap[value]!));
                         }
                       }
                     },
@@ -121,7 +137,8 @@ class _TeamState extends State<Team> {
                 } else if (state is MemberLoaded) {
                   return Expanded(
                     child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 8.0,
                         mainAxisSpacing: 8.0,
@@ -153,7 +170,8 @@ class _TeamState extends State<Team> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: NetworkImage(member['imageUrl']),
+                                  backgroundImage:
+                                     CachedNetworkImageProvider(member['imageUrl']),
                                   radius: 45,
                                 ),
                                 const SizedBox(height: 10),
@@ -176,16 +194,20 @@ class _TeamState extends State<Team> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.person),
+                                      icon: Image.asset('assets/linkedin.png',
+                                          width: 32, height: 32),
+                                      iconSize: 32,
                                       onPressed: () {
-                                        _launchUrl(
+                                        _launchLinkedIn(
                                             'https://www.linkedin.com/in/${member['linkedin']}');
                                       },
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.code),
+                                      icon: Image.asset('assets/github.png',
+                                          width: 32, height: 32),
+                                      iconSize: 32,
                                       onPressed: () {
-                                        _launchUrl(
+                                        _launchGitHub(
                                             'https://github.com/${member['github']}');
                                       },
                                     ),
@@ -210,13 +232,37 @@ class _TeamState extends State<Team> {
     );
   }
 
-  void _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  // void _launchUrl(String url) async {
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
+ 
+
+void _launchLinkedIn(String username) async {
+  final linkedInAppUrl = Uri.parse("$username");
+  final linkedInWebUrl = Uri.parse("$username");
+
+  if (await canLaunchUrl(linkedInAppUrl)) {
+    await launchUrl(linkedInAppUrl);
+  } else {
+    await launchUrl(linkedInWebUrl, mode: LaunchMode.externalApplication);
   }
+}
+
+void _launchGitHub(String username) async {
+  final githubAppUrl = Uri.parse("$username");
+  final githubWebUrl = Uri.parse("$username");
+
+  if (await canLaunchUrl(githubAppUrl)) {
+    await launchUrl(githubAppUrl);
+  } else {
+    await launchUrl(githubWebUrl, mode: LaunchMode.externalApplication);
+  }
+}
+
 
   void _showFacultyDialog() {
     showDialog(
@@ -226,7 +272,8 @@ class _TeamState extends State<Team> {
           backgroundColor: Colors.black,
           title: Text(
             'Our Faculty',
-            style: GoogleFonts.aBeeZee(textStyle: const TextStyle(color: Colors.white)),
+            style: GoogleFonts.aBeeZee(
+                textStyle: const TextStyle(color: Colors.white)),
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -263,7 +310,8 @@ class _TeamState extends State<Team> {
           SizedBox(height: 8),
           Text(
             name,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ],
       ),
